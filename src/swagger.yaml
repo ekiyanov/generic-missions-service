@@ -1,0 +1,237 @@
+definitions:
+  ListMissionsRS:
+    items:
+      $ref: '#/definitions/Mission'
+    type: array
+    x-go-package: github.com/ets/missions
+  Mission:
+    properties:
+      counter:
+        description: Unique Identifier of the mission
+        type: string
+        x-go-name: Counter
+      goal:
+        description: Goal of completion
+        format: int64
+        type: integer
+        x-go-name: Goal
+      id:
+        description: Mission Id
+        type: string
+        x-go-name: Id
+      meta:
+        additionalProperties:
+          type: object
+        description: Client side related Meta
+        type: object
+        x-go-name: Meta
+      name:
+        description: Mission name key. Expected to be used to be localized in human
+          readable name
+        type: string
+        x-go-name: NameKey
+      reward:
+        description: Reward item which should be granted upon completion
+        items:
+          $ref: '#/definitions/Reward'
+        type: array
+        x-go-name: Reward
+      tags:
+        description: Tags
+        items:
+          type: string
+        type: array
+        x-go-name: Tags
+    type: object
+    x-go-package: github.com/ets/missions
+  MissionProgress:
+    properties:
+      claimed_at:
+        description: When mission been claimed. Epoch time. 0 means it was not claimed
+          yet
+        format: int64
+        type: integer
+        x-go-name: ClaimedAt
+      current:
+        description: How many counters completed so far. Should be capped by Goal
+        format: int64
+        type: integer
+        x-go-name: Current
+      goal:
+        description: Total amount should be reached
+        format: int64
+        type: integer
+        x-go-name: Goal
+      id:
+        description: Mission Id
+        type: string
+        x-go-name: Id
+      meta:
+        additionalProperties:
+          type: object
+        description: Meta from mission
+        type: object
+        x-go-name: Meta
+      unlocked_at:
+        description: When Current become equal or larger than goal ?
+        format: int64
+        type: integer
+        x-go-name: UnlockedAt
+    type: object
+    x-go-package: github.com/ets/missions
+  MissionProgressRQ:
+    properties:
+      user_id:
+        type: string
+        x-go-name: UserID
+    type: object
+    x-go-package: github.com/ets/missions
+  ReportUserProgressRQ:
+    properties:
+      counter:
+        type: string
+        x-go-name: Counter
+      user_id:
+        type: string
+        x-go-name: UserID
+    type: object
+    x-go-package: github.com/ets/missions
+  ReportUserProgressRS:
+    properties:
+      progress:
+        items:
+          $ref: '#/definitions/MissionProgress'
+        type: array
+        x-go-name: ModifiedProgress
+      reward:
+        items:
+          $ref: '#/definitions/Reward'
+        type: array
+        x-go-name: Rewarded
+    type: object
+    x-go-package: github.com/ets/missions
+  Reward:
+    properties:
+      amount:
+        description: How many of items should be rewarded
+        format: int64
+        type: integer
+        x-go-name: Amount
+      kind:
+        description: what kind of item should be rewarded
+        type: string
+        x-go-name: Kind
+    type: object
+    x-go-package: github.com/ets/missions
+  UserMission:
+    properties:
+      mission_id:
+        description: MissionId which is should be claimed. Mission Current should
+          be equal to the Goal
+        type: string
+        x-go-name: MissionID
+      user_id:
+        description: UserId for  whom to look for a mission
+        type: string
+        x-go-name: UserID
+    type: object
+    x-go-package: github.com/ets/missions
+  UserMissionProgressRS:
+    items:
+      $ref: '#/definitions/MissionProgress'
+    type: array
+    x-go-package: github.com/ets/missions
+  WipeRequest:
+    properties:
+      epoch:
+        description: Time of the sending a request. Should not differs from server
+          more than 25 seconds
+        format: int64
+        type: integer
+        x-go-name: Epoch
+      signature:
+        description: Hex encoded SHA256 hash of {EPOCH}{USERID}{SERVER_WIPE_KEY}
+        type: string
+        x-go-name: Sign
+      user_id:
+        description: UserID for whom wipe the progress
+        type: string
+        x-go-name: UserID
+    type: object
+    x-go-package: github.com/ets/missions
+  WipeRequestResponse:
+    properties:
+      removed:
+        description: Number of removed missions
+        format: int64
+        type: integer
+        x-go-name: NumRemoved
+    type: object
+    x-go-package: github.com/ets/missions
+info: {}
+paths:
+  /claim:
+    post:
+      operationId: claim
+      parameters:
+      - description: Claim user's mission
+        in: body
+        name: claim
+        schema:
+          $ref: '#/definitions/UserMission'
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/MissionProgress'
+  /missions:
+    get:
+      operationId: missions
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/ListMissionsRS'
+  /progress:
+    get:
+      operationId: progress
+      parameters:
+      - description: The id for the user that needs to be fetched.
+        in: query
+        name: u
+        required: true
+        type: string
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/UserMissionProgressRS'
+    post:
+      operationId: progress
+      parameters:
+      - description: The userID and counter which to increase
+        in: body
+        name: progress
+        schema:
+          $ref: '#/definitions/ReportUserProgressRQ'
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/ReportUserProgressRS'
+  /wipe:
+    post:
+      operationId: wipe
+      parameters:
+      - $ref: '#/definitions/WipeRequest'
+        description: Clears user's progress entirely
+        in: body
+        name: wipe
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/WipeRequestResponse'
+        "400":
+          description: bad sign of broken payload
+swagger: "2.0"

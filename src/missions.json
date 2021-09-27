@@ -1,0 +1,115 @@
+[
+      {
+        "counter": "event.new_user_signup",
+        
+        "meta":{
+          "image": "register.jpg",
+          "description": "To start your journey into the Sphere Metaverse. These first few adventures will teach you about the game and collect your first ORBs and Cardpacks",
+          "action": "register"
+        },
+        
+        "goal": 1,
+        "name": "Signup For Sphere Metaverse",
+        "id": "mission.new_user_signup",
+
+        "tags":["ab","cd","de"]
+      },
+      {
+        "counter": "event.win_duel.bot_level1",
+        
+        "reward": [
+          {
+            "kind": "card_pack"
+          }
+        ],
+        "goal": 1,
+        "name": "Defeat A Weak Bot",
+        "id": "mission.win_duel.bot_level1",
+
+        "meta":{
+          "image": "duelz_game.jpg",
+          "description": "In this tutorial, you will be taught the basics of the Sphere’s core combat module (DuelZ). The bot is easy to beat and will be idle...most of the time.",
+          
+          "action": "win_duel",
+          "actionPayload": "bot_level1"
+        }
+      },
+      {
+        "counter": "event.open_pack",
+           "id": "mission.open_pack",
+        
+        "reward": [
+          {
+            "kind": "orb",
+            "amount": 100
+          }
+        ],
+        "goal": 1,
+        "name": "Open Your Free Cardpack!",
+
+        "meta":{
+        "image": "open_pack.jpg",
+        "description": "Each basic Sphere Cardpack contains 5 cards. Open this Cardpack now to proceed. They are your NFTs (Non-Fungible Tokens). These items exist on the blockchain and belong to you, and they can be moved to your own wallet or another marketplace to trade for real money.",
+     
+        "action": "open_pack"
+        }
+      },
+      {
+        "counter": "event.submit_deck",
+        
+        "reward": [
+          {
+            "kind": "orb",
+            "amount": 200
+          }
+        ],
+        "goal": 1,
+        "name": "Build Your First Deck",
+        "id": "mission.submit_deck",
+
+        "meta":{
+        "image": "deck_builder.jpg",
+        "description": "To play with your NFTs you need to build your first deck. Open the Deck Builder to see the 5 cards from your first Cardpack. Place all 5 cards into your deck by clicking the bottom icons, then press submit.",
+        "action": "submit_deck"
+        }
+      },
+      {
+        "counter": "event.win_duel.bot_level2",
+        
+        "reward": [
+          {
+            "kind": "card_pack",
+            "amount": 2
+          }
+        ],
+        "goal": 1,
+        "name": "Defeat a Stronger Bot",
+        "id": "mission.win_duel.bot_level2",
+
+        "meta":{
+        "image": "duelz_game.jpg",
+        "description": "Now it’s time for a more challenging bot. This bot will move and attack you like a real player. You will need to defeat this bot twice.",
+        "action": "win_duel",
+        "actionPayload": "bot_level2"
+        }
+      },
+      {
+        "counter": "event.win_duel.player",
+        
+        "reward": [
+          {
+            "kind": "orb",
+            "amount": 500
+          }
+        ],
+        "goal": 1,
+        "name": "Play a Real Player",
+        "id": "mission.win_duel.player",
+        "meta":{
+          "image": "duelz_interior.jpg",
+          "description": "Ready to play another player? Time to connect with to Telegram and join the Sphere Metaverse. There you will win more ORBs and NFTs.",
+          "action": "win_duel",
+          "actionPayload": "player"
+        }
+      }
+    ]
